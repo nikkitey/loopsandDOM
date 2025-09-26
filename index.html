@@ -5,54 +5,65 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Loop and CSS Project</title>
   <style>
-    /* Background color is controlled by JavaScript */
-    :root {
-      --color: lightblue;
-    }
     body {
       font-family: Arial, sans-serif;
-      background-color: var(--color);
+      background-color: lightblue;
       text-align: center;
       padding: 20px;
+      overflow-x: hidden;
     }
-    /* Card style */
     .card {
       background: white;
+      color: black;
       border: 1px solid #ccc;
       border-radius: 8px;
       padding: 10px;
       margin: 10px;
       display: inline-block;
       width: 120px;
+      font-weight: bold;
     }
-    /* Dark mode style */
     .dark {
       background-color: #222;
       color: white;
+    }
+    .dark .card {
+      background: #444;
+      color: white;
+      border: 1px solid #666;
+    }
+    .heart {
+      position: absolute;
+      font-size: 24px;
+      animation: floatUp 1s ease forwards;
+    }
+    @keyframes floatUp {
+      from { transform: translateY(0); opacity: 1; }
+      to { transform: translateY(-50px); opacity: 0; }
     }
   </style>
 </head>
 <body>
   <h1>Loop and CSS Demo</h1>
 
-  <!-- Slider to change background color -->
+  <!-- Slider to change background -->
   <label>
     Energy:
     <input id="energy" type="range" min="0" max="100" value="50">
   </label>
   <p>Value: <span id="energyValue">50</span></p>
 
-  <!-- Buttons for loops and dark mode -->
+  <!-- Buttons -->
   <input id="count" type="number" min="1" max="10" value="5">
   <button id="makeCards">Make Cards (for loop)</button>
-  <button id="sparkles">Add Sparkles (while loop)</button>
+  <button id="hearts">Add Hearts (while loop)</button>
   <button id="darkMode">Toggle Dark Mode</button>
 
-  <!-- Place where cards will appear -->
+  <!-- Cards will appear here -->
   <div id="cards"></div>
 
   <script>
-    const root = document.documentElement;
+    const body = document.body;
     const cards = document.getElementById('cards');
     const energy = document.getElementById('energy');
     const energyValue = document.getElementById('energyValue');
@@ -61,13 +72,12 @@
     energy.addEventListener('input', () => {
       const value = energy.value;
       energyValue.textContent = value;
-      const color = `hsl(${value * 3}, 70%, 80%)`; // makes color shift with slider
-      root.style.setProperty('--color', color);
+      body.style.backgroundColor = `hsl(${value * 3}, 70%, 80%)`;
     });
 
     // For loop: make cards
     document.getElementById('makeCards').addEventListener('click', () => {
-      cards.innerHTML = ''; // clear old cards
+      cards.innerHTML = '';
       const num = parseInt(document.getElementById('count').value);
       for (let i = 1; i <= num; i++) {
         const card = document.createElement('div');
@@ -77,25 +87,27 @@
       }
     });
 
-    // While loop: add sparkles
-    document.getElementById('sparkles').addEventListener('click', () => {
+    // While loop: add hearts
+    document.getElementById('hearts').addEventListener('click', () => {
       let i = 0;
       while (i < 10) {
-        const sparkle = document.createElement('div');
-        sparkle.textContent = '✨';
-        sparkle.style.position = 'absolute';
-        sparkle.style.left = Math.random() * window.innerWidth + 'px';
-        sparkle.style.top = Math.random() * window.innerHeight + 'px';
-        document.body.appendChild(sparkle);
-        setTimeout(() => sparkle.remove(), 1000);
+        const heart = document.createElement('div');
+        heart.textContent = '❤️';
+        heart.className = 'heart';
+        heart.style.left = Math.random() * window.innerWidth + 'px';
+        heart.style.top = (window.innerHeight - 50) + 'px';
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 1000);
         i++;
       }
     });
 
     // Dark mode button
     document.getElementById('darkMode').addEventListener('click', () => {
-      document.body.classList.toggle('dark');
+      body.classList.toggle('dark');
     });
   </script>
 </body>
 </html>
+
+
